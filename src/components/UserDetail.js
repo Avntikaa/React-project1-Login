@@ -4,7 +4,7 @@ const UserDetail = (props) => {
 
   return (
  <ul className="goal-item">
-<li type='none'>{props.username}-{props.age}</li>
+<li type='none'>{props.username} {props.age} {props.college}</li>
     </ul>  )
 }
 

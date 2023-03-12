@@ -6,7 +6,7 @@ const TodoList = (props) => {
     <div className='goal-list'>
 {props.users.length>0 &&
     props.users.map((user)=>{
-      return  <UserDetail username={user.user} age={user.age}/>
+      return  <UserDetail key={Math.random()} username={user.user} age={user.age} college={user.college}/>
     })
 }
     </div>
