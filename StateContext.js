@@ -1,43 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, createContext} from "react";
+const Context = createContext();
+export const StateContext = ({ children }) => {
+ const[totalCount,setTotalCount]=useState(0);
+ const[itemaddedtocart,setItemaddedtocart]=useState([]);
+ const [totalprice,setTotalprice]=useState(0);
+  const cartcount=()=>{
+    setTotalCount(()=>totalCount+1);
+  }
 
-const AuthContext = React.createContext({
-  isLoggedIn: false,
-  onLogout: () => {},
-  onLogin: (email, password) => {}
-});
+  const cartitem=(item)=>{
+    let flag=false;
+    if(itemaddedtocart.length>0){
+    itemaddedtocart.forEach((i)=>{
+      if(i.dish===item.dish)
+      flag=true;
+    })
 
-export const AuthContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+      if(flag===false)
+      {
+        setItemaddedtocart((prev)=>[...prev,item]);
+      }
+  }
+  else{
+          setItemaddedtocart((prev)=>[...prev,item]);
+  }
+    setTotalprice((prev)=>prev+item.price);
+  }
 
-  useEffect(() => {
-    const storedUserLoggedInInformation = localStorage.getItem('isLoggedIn');
 
-    if (storedUserLoggedInInformation === '1') {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const logoutHandler = () => {
-    localStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
-  };
-
-  const loginHandler = () => {
-    localStorage.setItem('isLoggedIn', '1');
-    setIsLoggedIn(true);
-  };
-
+  // eslint-disable-next-line no-unused-vars
+  
   return (
-    <AuthContext.Provider
+    <Context.Provider
       value={{
-        isLoggedIn: isLoggedIn,
-        onLogout: logoutHandler,
-        onLogin: loginHandler,
-      }}
-    >
-      {props.children}
-    </AuthContext.Provider>
-  );
-};
+    cartitem,cartcount,itemaddedtocart,totalprice,totalCount
+        }}>
+      {children}
+    </Context.Provider>
+  )
+}
 
-export default AuthContext;
+export const useStateContext = () => useContext(Context);
